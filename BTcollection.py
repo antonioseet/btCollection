@@ -32,8 +32,9 @@ def main():
                 writeFiles(namesArray, addressesArray)
 
                 
-                timesProgramRan = timesProgramRan + 1
+                
                 print("Times program ran = " + str(timesProgramRan))
+                timesProgramRan = timesProgramRan + 1
                 time.sleep(2)
     
 
@@ -42,7 +43,7 @@ def main():
 def writeFiles(namesList, addressList):
     print("Saving...")
     with open("BTaddresses.txt", "r+") as addressFile:
-        with open("BTnames.txt", "r+") as namesFile:
+        with open("BTnames2.txt", "r+") as namesFile:
                 addressFile.truncate()
                 namesFile.truncate()
                 nameEntries = len(namesList)
