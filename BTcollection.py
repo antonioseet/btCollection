@@ -4,19 +4,18 @@ import time
 
         
 def main():
-    #Initiate Users with points from the points.txt file
+    # Read source files and convert into lists
     with open("BTaddresses.txt", "r") as addresses:
         with open("BTnames.txt", "r") as names:
-            #read the addresses file and turn into array
+            # List part
             addressFile = addresses.read()
             addressesArray = addressFile.split()
 
             namesFile = names.read()
             namesArray = namesFile.split()
             print("Names in File = "+str(namesArray))
-            #Infinite loop that looks for users until program is stopped.
-
-            timesProgramRan = 1
+            
+            #Infinite loop that looks for new devices until program is stopped.            timesProgramRan = 1
             while True:
 
                 nearby_devices = bluetooth.discover_devices(duration=2, lookup_names=True)
@@ -39,7 +38,7 @@ def main():
     
 
 
-##Update files & Save point progress        
+# update names and addresses        
 def writeFiles(namesList, addressList):
     print("Saving...")
     with open("BTaddresses.txt", "r+") as addressFile:
