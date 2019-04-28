@@ -10,12 +10,12 @@ def main():
     #Infinite loop that looks for new devices until program is stopped.            timesProgramRan = 1
     while True:
         nearby_devices = bluetooth.discover_devices(duration=2, lookup_names=True)
-        print "Discoverable devices in range" + str(nearby_devices)
+        print ("Discoverable devices in range" + str(nearby_devices))
         for addr, name in nearby_devices:
             if(addr not in addressesArray):
                 addressesArray.append(addr)
             if(name not in namesArray):
-                print "NEW DEVICE: " + str(name)
+                print ("NEW DEVICE: " + str(name))
                 namesArray.append(name)
                 
         writeFiles(namesArray, addressesArray)
@@ -27,7 +27,7 @@ def main():
 
 # update names and addresses        
 def writeFiles(namesList, addressList):
-    print "Saving..."
+    print ("Saving...")
     with open("BTaddresses.txt", "r+") as addressFile:
         with open("BTnames.txt", "r+") as namesFile:
                 addressFile.truncate()
@@ -43,6 +43,6 @@ def writeFiles(namesList, addressList):
                     else:
                         namesFile.write(namesList[i] + "\n")
                         addressFile.write(addressList[i] + "\n")
-                print "SAVED!\n"
+                print ("SAVED!\n")
 
 main()
