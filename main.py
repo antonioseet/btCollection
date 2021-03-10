@@ -36,12 +36,15 @@ def lookFor(userList):
     
         print ("Looking for: " + userList[i].name)
         result = bluetooth.lookup_name(userList[i].BTid , timeout=4)
+        
     
         if(result != None):
             userList[i].points+=10
             userList[i].status = 1
             print ("+10 points!!")
             print ("Total: "+ str(userList[i].points))
+
+            print ("RESULT: " + result)
         
         else:
             userList[i].status = 0
@@ -52,7 +55,7 @@ def lookFor(userList):
 ##Update files & Save point progress        
 def writeFiles(userList):
     print("Saving...")
-    with open("names.txt", "r+") as names:
+    with open("BTnames.txt", "r+") as names:
         with open("points.txt", "r+") as points:
             with open("status.txt", "r+") as status:
                 points.truncate()
