@@ -55,6 +55,8 @@ def lookFor(userList):
 ##Update files & Save point progress        
 def writeFiles(userList):
     print("Saving...")
+
+    # nested with opens because we want to all three files at the same time
     with open("BTnames.txt", "r+") as names:
         with open("points.txt", "r+") as points:
             with open("status.txt", "r+") as status:
