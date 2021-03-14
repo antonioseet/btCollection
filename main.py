@@ -1,5 +1,5 @@
 from User import User
-#import bluetooth
+import bluetooth
 import time
 
         
@@ -10,11 +10,12 @@ def main():
 
     ###### For testing purposes, let's print all the users from our users.txt file #####
     print(summary(userList))
-    exit()
+    #exit()
 
     #Infinite loop that looks for users indefinitely
     while True:
-        #lookFor(userList)
+        lookFor(userList)
+        print(summary(userList))
         #writeFiles(userList)
         time.sleep(5)
     
@@ -56,17 +57,18 @@ def lookFor(userList):
     # change this to for user in userList
     for user in userList:
         print("Looking for: " + user.name)
-        #result = bluetooth.lookup_name(user.BTid, timeout=4)
+        result = bluetooth.lookup_name(user.BTid, timeout=4) # result contains the name of the device being searched
+        findNearbyDevices(10) # prints any discoverable device nearby
 
         # if we find the user close by:
-        #   Add points, change status
+        # Add points, change status
         if(result != None):
             user.addPoints(stdPoints)
             user.setActive(True)
             print("+10")
 
             # FYI
-            #print(result)
+            print(result)
         else:
             user.setActive(False)
             user.addPoints(-1)
@@ -96,6 +98,17 @@ def writeFiles(userList):
                         status.write(str(userList[i].status) + "\n")
                         names.write(userList[i].name + "\n")
                 print("****Data saved: Safe to close****\n")
+
+def findNearbyDevices(n):
+    # nearby devices is a list of tuples, First: BTid, Second: Name
+    nearbyDevices = bluetooth.discover_devices(duration=n, lookup_names=True, flush_cache=True, lookup_class=False)
+    print(nearbyDevices)
+    
+    # if nearbydevices is not empty, we want to create new users and add them to the list.
+    # if BTid already in our list of registered users, ignore it.
+    # make function return a list of users, add them where we call this.
+    # if dupllicate names with same BTid, put a (2) next to it, and (3) ... (n)
+    
 
 # returns a string summary of all users
 def summary(userList):
