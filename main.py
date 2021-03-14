@@ -1,56 +1,76 @@
 from User import User
-import bluetooth
+#import bluetooth
 import time
-
 
         
 def main():
+
+    # Get all users specified in file
+    userList = populateUsersFromFile()
+
+    ###### For testing purposes, let's print all the users from our users.txt file #####
+    print(summary(userList))
+    exit()
+
+    #Infinite loop that looks for users indefinitely
+    while True:
+        #lookFor(userList)
+        #writeFiles(userList)
+        time.sleep(5)
+    
+
+# This method will take the users stored in users.txt
+# Returns: List of User objects
+def populateUsersFromFile():
+
+    userList = []
+
     #Initiate Users with points from the points.txt file
-    with open("points.txt", "r") as points:
+    with open("users.txt", "r") as usersFile:
 
-        #read the points file and turn into array
-        pointsFile = points.read()
-        pointsArray = pointsFile.split()
-        
-    ## WHENEVER YOU ADD A NEW USER
-    ## REMEMBER TO ADD A NEW POINT VALUE TO "points.txt"
-        tony = User("Tony", "3C:BB:FD:70:65:5E", int(pointsArray[0]))
-        sam = User("Sam", "98:FE:94:64:db:69", int(pointsArray[1]))
-        dave = User("David", "8C:8E:F2:4E:0E:11", int(pointsArray[2]))
-        tony2 = User("S9+", "A4:07:B6:89:85:14", int(pointsArray[3]))
+        # Read the users file and place contents in this 
+        usersData = usersFile.read()
 
-        userList = [tony,sam,dave,tony2]
+        # Get each line of text file into an array
+        # usersArray contains an array of all users raw data
+        # If there is a space in the name, the split will not work.
+        # when new devices with spaces in their names appear, rewrite them with underscores to save
+        usersArray = usersData.split()
+        print(usersArray)
 
-        #Infinite loop that looks for users indefinitely
-        while True:
+        # for every user in the array, create a user object with the provided params and add it to the users array
+        for user in usersArray:
+            userTruple = user.split("~") # splits user line into ["name", "BT ID", "100"]
+            newUser = User(userTruple[0], userTruple[1], int(userTruple[2]))
+            userList.append(newUser)
+
+    return userList
+
     
-            lookFor(userList)
-            writeFiles(userList)
-    
-            time.sleep(10)
-    
-##goes through the list of users and looks for the Bluetooth Address
+## Iterates through the list of users and looks for the Bluetooth Address
 def lookFor(userList):
 
-    for i in range(len(userList)):
-    
-        print ("Looking for: " + userList[i].name)
-        result = bluetooth.lookup_name(userList[i].BTid , timeout=4)
-        
-    
-        if(result != None):
-            userList[i].points+=10
-            userList[i].status = 1
-            print ("+10 points!!")
-            print ("Total: "+ str(userList[i].points))
+    # standard points
+    stdPoints = 10
 
-            print ("RESULT: " + result)
-        
+    # change this to for user in userList
+    for user in userList:
+        print("Looking for: " + user.name)
+        #result = bluetooth.lookup_name(user.BTid, timeout=4)
+
+        # if we find the user close by:
+        #   Add points, change status
+        if(result != None):
+            user.addPoints(stdPoints)
+            user.setActive(True)
+            print("+10")
+
+            # FYI
+            #print(result)
         else:
-            userList[i].status = 0
-            print (userList[i].name +" is OUT")
-            print ("Total: "+ str(userList[i].points))
-        print ("")
+            user.setActive(False)
+            user.addPoints(-1)
+            print("-1")
 
 ##Update files & Save point progress        
 def writeFiles(userList):
@@ -77,9 +97,12 @@ def writeFiles(userList):
                         names.write(userList[i].name + "\n")
                 print("****Data saved: Safe to close****\n")
 
-
-
-
+# returns a string summary of all users
+def summary(userList):
+    s = ""
+    for user in userList:
+        s += user.toString() + "\n"
+    return s
                     
 
 
