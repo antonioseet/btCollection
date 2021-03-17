@@ -181,7 +181,7 @@ def summary(userList):
         s += user.toString() + "\n"
     return s
 
-## Returns a string with no spaces
+## Returns a string with no spaces by replacing space chars with underscore
 def noSpaces(s):
     newString = ""
     for c in s:
