@@ -27,6 +27,10 @@ class User:
 
         return self.name + spacesStr + " | Total points:  " + str(self.points)
 
+    def toFile(self):
+        return self.name + "~" + self.BTid + "~" + str(self.points)
+
+
     def setActive(self, status):
         self.status = status
 
