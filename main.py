@@ -54,7 +54,6 @@ def populateUsersFromFile(filename):
         # If there is a space in the name, the split will not work.
         # when new devices with spaces in their names appear, rewrite them with underscores to save
         usersArray = usersData.split()
-        print(usersArray)
 
         # for every user in the array, create a user object with the provided params and add it to the users array
         for user in usersArray:
@@ -74,7 +73,7 @@ def lookForUser(userList):
     # change this to for user in userList
     for user in userList:
         print("Looking for: " + user.name)
-        result = bluetooth.lookup_name(user.BTid, timeout=4) # result contains the name of the device being searched
+        result = bluetooth.lookup_name(user.BTid, timeout=8) # result contains the name of the device being searched
 
         # if we find the user close by:
         # Add points, change status
@@ -83,14 +82,14 @@ def lookForUser(userList):
             user.setActive(True)
             print("+" + str(stdPoints))
 
-            # FYI
-            print(result)
+            # FYI: result returns the name of the device unformatted (with spaces)
+            #print(result)
         else:
             user.setActive(False)
             user.addPoints(-1)
             print("-1")
     
-    print("Final results: \n " + summary(userList))
+    print("Final results: \n" + summary(userList))
 
 ##Update files & Save point progress        
 def writeSaveFile(userList):
@@ -111,12 +110,12 @@ def writeSaveFile(userList):
 
 def findNearbyDevices(userList, duration):
     # nearby devices is a list of tuples, First: BTid, Second: Name
+    print("Looking for devices(" + str(duration) + " seconds)")
     nearbyDevices = bluetooth.discover_devices(duration=duration, lookup_names=True, flush_cache=True, lookup_class=False)
-    #print(nearbyDevices)
-    
+    print("Found "+str(len(nearbyDevices)))
     # if dupllicate names with same BTid, put a (2) next to it, and (3) ... (n)
     for address, name in nearbyDevices:
-
+        
         # if new address
         if(not addressInUserList(address, name, userList)):
             noSpacesName = noSpaces(name)
@@ -195,4 +194,4 @@ def noSpaces(s):
 
 
 
-mainTest()
+main()
